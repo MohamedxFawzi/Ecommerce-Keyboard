@@ -3,6 +3,5 @@
 import dynamic from "next/dynamic";
 
 export const components = {
-  hero_seciton: dynamic(() => import("./HeroSeciton")),
-  nimbus_keyboards: dynamic(() => import("./NimbusKeyboards")),
+  hero: dynamic(() => import("./Hero")),
 };

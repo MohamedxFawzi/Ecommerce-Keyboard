@@ -1,13 +1,21 @@
 {
   "id": "homepage",
+  "label": "Homepage",
+  "repeatable": false,
+  "status": true,
+  "format": "page",
   "json": {
     "Main": {
       "slices": {
-        "config": {
-          "choices": {}
-        },
+        "type": "Slices",
         "fieldset": "Slice Zone",
-        "type": "Slices"
+        "config": {
+          "choices": {
+            "hero": {
+              "type": "SharedSlice"
+            }
+          }
+        }
       }
     },
     "SEO & Metadata": {
@@ -37,9 +45,5 @@
         "type": "Image"
       }
     }
-  },
-  "label": "Homepage",
-  "repeatable": false,
-  "status": true,
-  "format": "page"
+  }
 }

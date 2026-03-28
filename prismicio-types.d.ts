@@ -69,7 +69,7 @@ type ContentRelationshipFieldWithData<
   >;
 }[Exclude<TCustomType[number], string>["id"]];
 
-type HomepageDocumentDataSlicesSlice = never;
+type HomepageDocumentDataSlicesSlice = HeroSlice;
 
 /**
  * Content for Homepage documents
@@ -137,64 +137,66 @@ export type HomepageDocument<Lang extends string = string> =
 export type AllDocumentTypes = HomepageDocument;
 
 /**
- * Default variation for HeroSeciton Slice
+ * Primary content in *Hero → Default → Primary*
+ */
+export interface HeroSliceDefaultPrimary {
+  /**
+   * Heading field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * Body field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * Buy Button Text field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.buy_button_text
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  buy_button_text: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for Hero Slice
  *
  * - **API ID**: `default`
  * - **Description**: Default
  * - **Documentation**: https://prismic.io/docs/slices
  */
-export type HeroSecitonSliceDefault = prismic.SharedSliceVariation<
+export type HeroSliceDefault = prismic.SharedSliceVariation<
   "default",
-  Record<string, never>,
+  Simplify<HeroSliceDefaultPrimary>,
   never
 >;
 
 /**
- * Slice variation for *HeroSeciton*
+ * Slice variation for *Hero*
  */
-type HeroSecitonSliceVariation = HeroSecitonSliceDefault;
+type HeroSliceVariation = HeroSliceDefault;
 
 /**
- * HeroSeciton Shared Slice
+ * Hero Shared Slice
  *
- * - **API ID**: `hero_seciton`
- * - **Description**: HeroSeciton
+ * - **API ID**: `hero`
+ * - **Description**: Hero
  * - **Documentation**: https://prismic.io/docs/slices
  */
-export type HeroSecitonSlice = prismic.SharedSlice<
-  "hero_seciton",
-  HeroSecitonSliceVariation
->;
-
-/**
- * Default variation for NimbusKeyboards Slice
- *
- * - **API ID**: `default`
- * - **Description**: Default
- * - **Documentation**: https://prismic.io/docs/slices
- */
-export type NimbusKeyboardsSliceDefault = prismic.SharedSliceVariation<
-  "default",
-  Record<string, never>,
-  never
->;
-
-/**
- * Slice variation for *NimbusKeyboards*
- */
-type NimbusKeyboardsSliceVariation = NimbusKeyboardsSliceDefault;
-
-/**
- * NimbusKeyboards Shared Slice
- *
- * - **API ID**: `nimbus_keyboards`
- * - **Description**: NimbusKeyboards
- * - **Documentation**: https://prismic.io/docs/slices
- */
-export type NimbusKeyboardsSlice = prismic.SharedSlice<
-  "nimbus_keyboards",
-  NimbusKeyboardsSliceVariation
->;
+export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
 declare module "@prismicio/client" {
   interface CreateClient {
@@ -221,12 +223,10 @@ declare module "@prismicio/client" {
       HomepageDocumentData,
       HomepageDocumentDataSlicesSlice,
       AllDocumentTypes,
-      HeroSecitonSlice,
-      HeroSecitonSliceVariation,
-      HeroSecitonSliceDefault,
-      NimbusKeyboardsSlice,
-      NimbusKeyboardsSliceVariation,
-      NimbusKeyboardsSliceDefault,
+      HeroSlice,
+      HeroSliceDefaultPrimary,
+      HeroSliceVariation,
+      HeroSliceDefault,
     };
   }
 }

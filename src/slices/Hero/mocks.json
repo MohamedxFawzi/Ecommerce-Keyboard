@@ -1,0 +1,36 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"heading": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "heading1",
+						"content": {
+							"text": "There"
+						}
+					}
+				]
+			},
+			"body": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Mollit aute qui laboris quis tempor eiusmod magna quis commodo exercitation ut ipsum ut adipisicing ut. Minim consectetur nulla minim exercitation nostrud laboris cillum nisi consequat id incididunt. Sit id eiusmod nostrud occaecat fugiat incididunt."
+						}
+					}
+				]
+			},
+			"buy_button_text": {
+				"__TYPE__": "FieldContent",
+				"value": "familiar",
+				"type": "Text"
+			}
+		},
+		"items": []
+	}
+]
