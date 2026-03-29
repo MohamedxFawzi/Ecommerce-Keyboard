@@ -1,8 +1,10 @@
+"use client";
 import { FC } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
-import { left } from './../../../node_modules/monocle-ts/es6/Iso';
+import { Canvas } from "@react-three/fiber";
+import { Scene } from "./Scene";
 
 /**
  * Props for `Hero`.
@@ -21,6 +23,9 @@ const Hero: FC<HeroProps> = ({ slice }) => {
     >
       <div className="hero-scene pointer-events-none sticky top-0 h-dvh w-full">
         {/* Canvas */}
+        <Canvas shadows="soft">
+          <Scene />
+        </Canvas>
       </div>
       {/* hero content */}
       <div className="hero-content absolute inset-x-0 top-0 h-dvh">
@@ -40,7 +45,11 @@ const Hero: FC<HeroProps> = ({ slice }) => {
           />
         </Bounded>
 
-        <Bounded fullWidth className="hedo-body absolute bottom-0 inset-x-0 md:right-[8vw] md:left-auto" innerClassName="flex flex-col gap-3">
+        <Bounded
+          fullWidth
+          className="hedo-body absolute inset-x-0 bottom-0 md:right-[8vw] md:left-auto"
+          innerClassName="flex flex-col gap-3"
+        >
           <div className="max-w-md">
             <PrismicRichText
               field={slice.primary.body}
