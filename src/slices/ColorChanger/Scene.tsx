@@ -3,10 +3,52 @@ import { Keyboard } from "@/components/Keyboards";
 import { Stage, useTexture } from "@react-three/drei";
 import { KEYCAP_TEXTURES } from ".";
 import * as THREE from "three";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+
+gsap.registerPlugin(useGSAP);
 export function Scene({ selectedTextureId, onAnimationComplete }: SceneProps) {
+  const keyboardRef = useRef<THREE.Group>(null);
   const texturePaths = KEYCAP_TEXTURES.map((t) => t.path);
   const textures = useTexture(texturePaths);
+  const [currentTextureId, SetCurrentTextureId] = useState(selectedTextureId);
+  useGSAP(() => {
+    // Animate the keyboard
+    if (!keyboardRef.current || selectedTextureId === currentTextureId) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // If the user prefers reduced motion, skip the animation and directly change the texture
+      const keyboard = keyboardRef.current;
+      if (!keyboard) return;
+      const tl = gsap.timeline({
+        onComplete: () => {
+          onAnimationComplete();
+        },
+      });
+
+      tl.to(keyboard.position, {
+        y: 0.3,
+        duration: 0.4,
+        ease: "power2.out",
+        onComplete: () => {
+          SetCurrentTextureId(selectedTextureId);
+        },
+      });
+      tl.to(keyboard.position, {
+        y: 0,
+        duration: 0.6,
+        ease: "elastic.out(1,0.4)",
+      });
+    });
+
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      // If the user prefers reduced motion, skip the animation and directly change the texture
+      SetCurrentTextureId(selectedTextureId);
+      onAnimationComplete();
+    });
+  }, [selectedTextureId, currentTextureId]);
+
   const materials = useMemo(() => {
     const materialMap: { [key: string]: THREE.MeshStandardMaterial } = {};
     KEYCAP_TEXTURES.forEach((textureConfig, index) => {
@@ -29,9 +71,9 @@ export function Scene({ selectedTextureId, onAnimationComplete }: SceneProps) {
 
   return (
     <Stage environment={"city"} intensity={0.05} shadows="contact">
-      <group>
+      <group ref={keyboardRef}>
         <Keyboard
-          keycapMaterial={materials[selectedTextureId]}
+          keycapMaterial={materials[currentTextureId]}
           knobColor={currentKnobColor}
         />
       </group>

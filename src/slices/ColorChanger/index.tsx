@@ -64,6 +64,9 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
   function handleTextureSelect(texture: (typeof KEYCAP_TEXTURES)[number]) {
     if (texture.id === selectedTextureId || isAnimating) return; // do nothing if the same texture is selected
     setSelectedTextureId(texture.id);
+
+    setIsAnimating(true);
+
     setBackgroundText(
       () => KEYCAP_TEXTURES.find((t) => t.id === texture.id)?.name || "",
     );
@@ -129,6 +132,7 @@ const ColorChanger: FC<ColorChangerProps> = ({ slice }) => {
               <button
                 // handle seleced texture
                 onClick={() => handleTextureSelect(texture)}
+                disabled={isAnimating}
                 className={clsx(
                   "flex aspect-square flex-col items-center justify-center rounded-lg border-2 p-4 hover:scale-105 motion-safe:transition-all motion-safe:duration-300",
                   selectedTextureId === texture.id
