@@ -70,11 +70,15 @@ export function Scene({ selectedTextureId, onAnimationComplete }: SceneProps) {
   )?.knobColor;
 
   return (
-    <Stage environment={"city"} intensity={0.05} shadows="contact">
+    <Stage environment={"city"} intensity={0.002} shadows="contact">
       <group ref={keyboardRef}>
+      
         <Keyboard
           keycapMaterial={materials[currentTextureId]}
           knobColor={currentKnobColor}
+          position={[0.2, -0.5, 1.9]}
+          rotation={[0.5, 0, 0]}
+          castShadow
         />
       </group>
     </Stage>
