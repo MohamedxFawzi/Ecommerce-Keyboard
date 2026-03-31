@@ -6,4 +6,7 @@ export const components = {
   bento_box: dynamic(() => import("./BentoBox")),
   color_changer: dynamic(() => import("./ColorChanger")),
   hero: dynamic(() => import("./Hero")),
+  marquee: dynamic(() => import("./Marquee")),
+  purchase_btn: dynamic(() => import("./PurchaseBtn")),
+  switch_playground: dynamic(() => import("./SwitchPlayground")),
 };

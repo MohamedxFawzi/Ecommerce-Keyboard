@@ -11,6 +11,15 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "purchase_btn": {
+              "type": "SharedSlice"
+            },
+            "marquee": {
+              "type": "SharedSlice"
+            },
+            "switch_playground": {
+              "type": "SharedSlice"
+            },
             "color_changer": {
               "type": "SharedSlice"
             },

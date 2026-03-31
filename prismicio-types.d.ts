@@ -70,6 +70,9 @@ type ContentRelationshipFieldWithData<
 }[Exclude<TCustomType[number], string>["id"]];
 
 type HomepageDocumentDataSlicesSlice =
+  | PurchaseBtnSlice
+  | MarqueeSlice
+  | SwitchPlaygroundSlice
   | ColorChangerSlice
   | BentoBoxSlice
   | HeroSlice;
@@ -137,14 +140,121 @@ export type HomepageDocument<Lang extends string = string> =
     Lang
   >;
 
-export type AllDocumentTypes = HomepageDocument;
+/**
+ * Content for Product documents
+ */
+interface ProductDocumentData {
+  /**
+   * Name field in *Product*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.name
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * Price (cents) field in *Product*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.price
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  price: prismic.NumberField;
+
+  /**
+   * image field in *Product*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Description field in *Product*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.description
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  description: prismic.RichTextField;
+}
 
 /**
- * Item in *BentoBox → Default → Primary → items*
+ * Product document from Prismic
+ *
+ * - **API ID**: `product`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProductDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ProductDocumentData>,
+    "product",
+    Lang
+  >;
+
+/**
+ * Content for Switch documents
+ */
+interface SwitchDocumentData {
+  /**
+   * Name field in *Switch*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch.name
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * HexColor field in *Switch*
+   *
+   * - **Field Type**: Color
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch.color
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/color
+   */
+  color: prismic.ColorField;
+}
+
+/**
+ * Switch document from Prismic
+ *
+ * - **API ID**: `switch`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type SwitchDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<SwitchDocumentData>, "switch", Lang>;
+
+export type AllDocumentTypes =
+  | HomepageDocument
+  | ProductDocument
+  | SwitchDocument;
+
+/**
+ * Item in *Features → Default → Primary → items*
  */
 export interface BentoBoxSliceDefaultPrimaryItemsItem {
   /**
-   * Size field in *BentoBox → Default → Primary → items*
+   * Size field in *Features → Default → Primary → items*
    *
    * - **Field Type**: Select
    * - **Placeholder**: *None*
@@ -154,7 +264,7 @@ export interface BentoBoxSliceDefaultPrimaryItemsItem {
   size: prismic.SelectField<"Small" | "Medium" | "Large">;
 
   /**
-   * Image field in *BentoBox → Default → Primary → items*
+   * Image field in *Features → Default → Primary → items*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
@@ -164,7 +274,7 @@ export interface BentoBoxSliceDefaultPrimaryItemsItem {
   image: prismic.ImageField<never>;
 
   /**
-   * Text field in *BentoBox → Default → Primary → items*
+   * Text field in *Features → Default → Primary → items*
    *
    * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
@@ -175,11 +285,11 @@ export interface BentoBoxSliceDefaultPrimaryItemsItem {
 }
 
 /**
- * Primary content in *BentoBox → Default → Primary*
+ * Primary content in *Features → Default → Primary*
  */
 export interface BentoBoxSliceDefaultPrimary {
   /**
-   * Heading field in *BentoBox → Default → Primary*
+   * Heading field in *Features → Default → Primary*
    *
    * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
@@ -189,7 +299,7 @@ export interface BentoBoxSliceDefaultPrimary {
   heading: prismic.RichTextField;
 
   /**
-   * items field in *BentoBox → Default → Primary*
+   * items field in *Features → Default → Primary*
    *
    * - **Field Type**: Group
    * - **Placeholder**: *None*
@@ -200,7 +310,7 @@ export interface BentoBoxSliceDefaultPrimary {
 }
 
 /**
- * Default variation for BentoBox Slice
+ * Default variation for Features Slice
  *
  * - **API ID**: `default`
  * - **Description**: Default
@@ -213,12 +323,12 @@ export type BentoBoxSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Slice variation for *BentoBox*
+ * Slice variation for *Features*
  */
 type BentoBoxSliceVariation = BentoBoxSliceDefault;
 
 /**
- * BentoBox Shared Slice
+ * Features Shared Slice
  *
  * - **API ID**: `bento_box`
  * - **Description**: BentoBox
@@ -346,6 +456,235 @@ type HeroSliceVariation = HeroSliceDefault;
  */
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
+/**
+ * Item in *Marquee → Default → Primary → Pharses*
+ */
+export interface MarqueeSliceDefaultPrimaryPharsesItem {
+  /**
+   * Text field in *Marquee → Default → Primary → Pharses*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: marquee.default.primary.pharses[].text
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  text: prismic.KeyTextField;
+}
+
+/**
+ * Primary content in *Marquee → Default → Primary*
+ */
+export interface MarqueeSliceDefaultPrimary {
+  /**
+   * Direction field in *Marquee → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: marquee.default.primary.direction
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  direction: prismic.SelectField<"Left" | "Right">;
+
+  /**
+   * Pharses field in *Marquee → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: marquee.default.primary.pharses[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  pharses: prismic.GroupField<Simplify<MarqueeSliceDefaultPrimaryPharsesItem>>;
+}
+
+/**
+ * Default variation for Marquee Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MarqueeSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<MarqueeSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Marquee*
+ */
+type MarqueeSliceVariation = MarqueeSliceDefault;
+
+/**
+ * Marquee Shared Slice
+ *
+ * - **API ID**: `marquee`
+ * - **Description**: Marquee
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MarqueeSlice = prismic.SharedSlice<
+  "marquee",
+  MarqueeSliceVariation
+>;
+
+/**
+ * Primary content in *PurchaseBtn → Default → Primary*
+ */
+export interface PurchaseBtnSliceDefaultPrimary {
+  /**
+   * Eyebrow field in *PurchaseBtn → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: purchase_btn.default.primary.eyebrow
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  eyebrow: prismic.KeyTextField;
+
+  /**
+   * Heading field in *PurchaseBtn → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: purchase_btn.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * Button Text field in *PurchaseBtn → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: purchase_btn.default.primary.button_text
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  button_text: prismic.KeyTextField;
+
+  /**
+   * Body field in *PurchaseBtn → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: purchase_btn.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+}
+
+/**
+ * Default variation for PurchaseBtn Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type PurchaseBtnSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<PurchaseBtnSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *PurchaseBtn*
+ */
+type PurchaseBtnSliceVariation = PurchaseBtnSliceDefault;
+
+/**
+ * PurchaseBtn Shared Slice
+ *
+ * - **API ID**: `purchase_btn`
+ * - **Description**: PurchaseBtn
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type PurchaseBtnSlice = prismic.SharedSlice<
+  "purchase_btn",
+  PurchaseBtnSliceVariation
+>;
+
+/**
+ * Item in *SwitchPlayground → Default → Primary → Switches*
+ */
+export interface SwitchPlaygroundSliceDefaultPrimarySwitchesItem {
+  /**
+   * Switch field in *SwitchPlayground → Default → Primary → Switches*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch_playground.default.primary.switches[].switch
+   * - **Documentation**: https://prismic.io/docs/fields/content-relationship
+   */
+  switch: ContentRelationshipFieldWithData<
+    [{ id: "switch"; fields: ["name", "color"] }]
+  >;
+}
+
+/**
+ * Primary content in *SwitchPlayground → Default → Primary*
+ */
+export interface SwitchPlaygroundSliceDefaultPrimary {
+  /**
+   * Heading field in *SwitchPlayground → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch_playground.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * Description field in *SwitchPlayground → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch_playground.default.primary.description
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  description: prismic.RichTextField;
+
+  /**
+   * Switches field in *SwitchPlayground → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: switch_playground.default.primary.switches[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  switches: prismic.GroupField<
+    Simplify<SwitchPlaygroundSliceDefaultPrimarySwitchesItem>
+  >;
+}
+
+/**
+ * Default variation for SwitchPlayground Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SwitchPlaygroundSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<SwitchPlaygroundSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *SwitchPlayground*
+ */
+type SwitchPlaygroundSliceVariation = SwitchPlaygroundSliceDefault;
+
+/**
+ * SwitchPlayground Shared Slice
+ *
+ * - **API ID**: `switch_playground`
+ * - **Description**: SwitchPlayground
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SwitchPlaygroundSlice = prismic.SharedSlice<
+  "switch_playground",
+  SwitchPlaygroundSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -370,6 +709,10 @@ declare module "@prismicio/client" {
       HomepageDocument,
       HomepageDocumentData,
       HomepageDocumentDataSlicesSlice,
+      ProductDocument,
+      ProductDocumentData,
+      SwitchDocument,
+      SwitchDocumentData,
       AllDocumentTypes,
       BentoBoxSlice,
       BentoBoxSliceDefaultPrimaryItemsItem,
@@ -384,6 +727,20 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      MarqueeSlice,
+      MarqueeSliceDefaultPrimaryPharsesItem,
+      MarqueeSliceDefaultPrimary,
+      MarqueeSliceVariation,
+      MarqueeSliceDefault,
+      PurchaseBtnSlice,
+      PurchaseBtnSliceDefaultPrimary,
+      PurchaseBtnSliceVariation,
+      PurchaseBtnSliceDefault,
+      SwitchPlaygroundSlice,
+      SwitchPlaygroundSliceDefaultPrimarySwitchesItem,
+      SwitchPlaygroundSliceDefaultPrimary,
+      SwitchPlaygroundSliceVariation,
+      SwitchPlaygroundSliceDefault,
     };
   }
 }
