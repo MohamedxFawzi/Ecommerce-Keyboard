@@ -1,5 +1,5 @@
 "use client";
-import { FC, Suspense } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import { Bounded } from "@/components/Bounded";
@@ -11,12 +11,34 @@ import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Loader } from "@/components/Loader";
 import { useProgress } from "@react-three/drei";
+import clsx from "clsx";
 
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 function LoaderWrapper() {
   const { active } = useProgress();
 
-  return active ? <Loader /> : null;
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (active) {
+      setIsLoading(true);
+    } else {
+      const timer = setTimeout(() => {
+        (setIsLoading(false), 100);
+        return () => clearTimeout(timer);
+      });
+    }
+  }, [active]);
+
+  return (
+    <div
+      className={clsx(
+        "motion-safe:transition-opacity motion-safe:duration-700",
+        isLoading ? "opacity-100" : "pointer-events-none opacity-0",
+      )}
+    >
+      <Loader />
+    </div>
+  );
 }
 /**
  * Props for `Hero`.
@@ -27,56 +49,56 @@ export type HeroProps = SliceComponentProps<Content.HeroSlice>;
  * Component for "Hero" Slices.
  */
 const Hero: FC<HeroProps> = ({ slice }) => {
-  // useGSAP(() => {
-  //   const mm = gsap.matchMedia();
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
 
-  //   mm.add("(prefers-reduced-motion: no-preference)", () => {
-  //     const split = SplitText.create(".hero-heading", {
-  //       type: "chars,lines",
-  //       mask: "lines",
-  //       linesClass: "line++",
-  //     });
-  //     const tl = gsap.timeline({ delay: 4.2 });
-  //     tl.from(split.chars, {
-  //       opacity: 0,
-  //       y: -120,
-  //       ease: "back",
-  //       duration: 0.4,
-  //       stagger: 0.07,
-  //     }).to(".hero-body", {
-  //       opacity: 1,
-  //       duration: 0.6,
-  //       ease: "power2.out",
-  //     });
-  //     gsap.fromTo(
-  //       ".hero-scene",
-  //       {
-  //         background:
-  //           "linear-gradient(135deg, #020617, #0f172a, #172554, #1e3a8a)",
-  //       },
-  //       {
-  //         background:
-  //           "linear-gradient(180deg, #0f172a, #3b82f6, #ffffff, #ffffff)",
-  //         scrollTrigger: {
-  //           trigger: ".hero",
-  //           start: "top top",
-  //           end: "50% bottom",
-  //           scrub: 1,
-  //         },
-  //       },
-  //     );
-  //   });
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const split = SplitText.create(".hero-heading", {
+        type: "chars,lines",
+        mask: "lines",
+        linesClass: "line++",
+      });
+      const tl = gsap.timeline({ delay: 4.2 });
+      tl.from(split.chars, {
+        opacity: 0,
+        y: -120,
+        ease: "back",
+        duration: 0.4,
+        stagger: 0.07,
+      }).to(".hero-body", {
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      gsap.fromTo(
+        ".hero-scene",
+        {
+          background:
+            "linear-gradient(135deg, #020617, #0f172a, #172554, #1e3a8a)",
+        },
+        {
+          background:
+            "linear-gradient(180deg, #0f172a, #3b82f6, #ffffff, #ffffff)",
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "50% bottom",
+            scrub: 1,
+          },
+        },
+      );
+    });
 
-  //   mm.add("(prefers-reduced-motion: reduce)", () => {
-  //     gsap.set(".hero-hedaing, .hero-body", { opacity: 1 });
-  //   });
-  // });
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      gsap.set(".hero-hedaing, .hero-body", { opacity: 1 });
+    });
+  });
 
   return (
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
-      className="hero blue-gradient-bg relative h-dvh text-white text-shadow-black/30 text-shadow-lg"
+      className="hero relative h-dvh text-white text-shadow-black/30 text-shadow-lg motion-safe:h-[300vh]"
     >
       <div className="hero-scene pointer-events-none sticky top-0 h-dvh w-full">
         {/* Canvas */}

@@ -4,7 +4,7 @@ import { components } from "@/slices";
 
 export default async function Page() {
 	const client = createClient();
-	const page = await client.getSingle("nimbus_keyboards");
+	const page = await client.getSingle("homepage");
 
 	return <SliceZone slices={page.data.slices} components={components} />;
 }

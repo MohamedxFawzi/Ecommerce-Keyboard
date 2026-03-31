@@ -3,6 +3,8 @@ import { Roboto_Flex } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PrismicPreview } from "@prismicio/next";
+import { repositoryName } from "@/prismicio";
 
 const robotoFlex = Roboto_Flex({
   variable: "--font-roboto-flex",
@@ -31,6 +33,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
       </body>
+      <PrismicPreview repositoryName={repositoryName} />
     </html>
   );
 }
